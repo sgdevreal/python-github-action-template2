@@ -27,4 +27,5 @@ jobs:
           EMAIL_ME: ${{ secrets.EMAIL_ME }}
           EMAIL_PASSWORD_ME: ${{ secrets.EMAIL_PASSWORD_ME }}
         run: python main.py
-    
+      - name: execute py script # run main.py
+        run: python immo.py
