@@ -26,8 +26,6 @@ while flag:
 
     # Make the HTTP request with the specified headers
     response = requests.get(f'https://www.immoweb.be/fr/search-results/maison-et-appartement/a-vendre/bruxelles/arrondissement?countries=BE&page={page}&orderBy=relevance', headers=headers)
-    with open(f'rawFiles/{page}_{date}.txt', 'w') as f:
-        f.write(response.text)
     print(len(response.json()['results']))
     if len(response.json()['results']) == 0:
         flag = False
