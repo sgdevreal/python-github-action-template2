@@ -19,8 +19,6 @@ while flag:
     print(f'page : {page} - time : {datetime.datetime.now()}')
     sleep(random.randint(1,5))
     response = requests.get(f'https://www.immoweb.be/fr/search-results/maison-et-appartement/a-vendre/bruxelles/arrondissement?countries=BE&page={page}&orderBy=relevance')
-    with open(f'rawFiles/{page}_{date}.txt', 'w') as f:
-        f.write(response.text)
     print(len(response.text))
     if len(response.text) == 0:
         flag = False
