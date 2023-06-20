@@ -32,7 +32,7 @@ while flag:
     if len(response.json()['results']) == 0:
         flag = False
         break
-    if page > 300:
+    if page > 5:
         flag = False
         break
     page+=1
