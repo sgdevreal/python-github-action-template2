@@ -31,9 +31,9 @@ jobs:
         
       - name: Save Excel File
         run: |
-          mv immo/outputfolder/database_$(date +'%Y%m%d').xlsx immo/outputfolder/database_$(date + "\%Y\%m\%d").xlsx
+          mv immo/outputfolder/database_$(date +'%Y%m%d').csv immo/outputfolder/database__$(date +'%Y%m%d').csv
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: main
-          file_pattern: '*.xlsx'
+          file_pattern: '*.csv'
