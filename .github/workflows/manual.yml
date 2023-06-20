@@ -28,3 +28,12 @@ jobs:
         run: python main.py
       - name: execute py script # run main.py
         run: python immo.py
+        
+      - name: Save Excel File
+        run: |
+          mv immo/outputfolder/database_$(date + "%Y%m%d").xlsx immo/outputfolder/database_$(date + "%Y%m%d").xlsx
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: main
+          file_pattern: '*.xlsx'
