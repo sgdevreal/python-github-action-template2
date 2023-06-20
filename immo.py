@@ -37,5 +37,5 @@ full_df["extractDate"] = datetime.datetime.now()
 full_df["extractYear"] = datetime.datetime.now().strftime("%Y")
 full_df["extractMonth"] = datetime.datetime.now().strftime("%m")
 full_df["extractDay"] = datetime.datetime.now().strftime("%d")
-df.to_excel(f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.xlsx")
+full_df.to_csv(f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv", sep='|')
 
