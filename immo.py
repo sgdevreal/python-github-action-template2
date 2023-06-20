@@ -18,12 +18,21 @@ df_list =[]
 while flag:
     print(f'page : {page} - time : {datetime.datetime.now()}')
     sleep(random.randint(1,5))
-    response = requests.get(f'https://www.immoweb.be/fr/search-results/maison-et-appartement/a-vendre/bruxelles/arrondissement?countries=BE&page={page}&orderBy=relevance')
-    print(len(response.text))
-    if len(response.text) == 0:
+    # Define the user agent string
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+
+    # Set the headers with the user agent
+    headers = {'User-Agent': user_agent}
+
+    # Make the HTTP request with the specified headers
+    response = requests.get(f'https://www.immoweb.be/fr/search-results/maison-et-appartement/a-vendre/bruxelles/arrondissement?countries=BE&page={page}&orderBy=relevance', headers=headers)
+    with open(f'rawFiles/{page}_{date}.txt', 'w') as f:
+        f.write(response.text)
+    print(len(response.json()['results']))
+    if len(response.json()['results']) == 0:
         flag = False
         break
-    if page > 250:
+    if page > 300:
         flag = False
         break
     page+=1
