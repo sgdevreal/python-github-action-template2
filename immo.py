@@ -10,11 +10,6 @@ import pandas as pd
 from pandas import json_normalize
 from time import sleep
 import random 
-import numpy as np
-
-
-# In[2]:
-
 
 flag = True
 page = 1
@@ -39,30 +34,10 @@ while flag:
     df = json_normalize(response.json(), record_path='results')
     df_list.append(df)    
 
-
-# In[3]:
-
-
 full_df = pd.concat(df_list)
-
-
-# In[4]:
-
-
 full_df["extractDate"] = datetime.datetime.now()
 full_df["extractYear"] = datetime.datetime.now().strftime("%Y")
 full_df["extractMonth"] = datetime.datetime.now().strftime("%m")
 full_df["extractDay"] = datetime.datetime.now().strftime("%d")
-
-
-# In[5]:
-
-
-full_df
-
-
-# In[8]:
-
-
 df.to_excel(f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.xlsx")
 
