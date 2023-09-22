@@ -46,3 +46,4 @@ full_df["extractMonth"] = datetime.datetime.now().strftime("%m")
 full_df["extractDay"] = datetime.datetime.now().strftime("%d")
 full_df.to_csv(f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv", sep='|')
 
+SERVICETOKENMD = os.environ["SERVICETOKENMD"]
