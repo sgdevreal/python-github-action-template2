@@ -10,6 +10,7 @@ import pandas as pd
 from pandas import json_normalize
 from time import sleep
 import random 
+import os
 import duckdb
 
 flag = True
