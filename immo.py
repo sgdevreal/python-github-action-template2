@@ -53,4 +53,4 @@ SERVICETOKENMD = os.environ["SERVICETOKENMD"]
 
 # initiate the MotherDuck connection through a service token through
 con = duckdb.connect(f'md:aggregated?motherduck_token={SERVICETOKENMD}') 
-con.sql(f"INSERT INTO TABLE aggregated_table AS SELECT * FROM {csv_name}")
+con.sql(f"INSERT INTO aggregated_table SELECT * FROM {csv_name}")
