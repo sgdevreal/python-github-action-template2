@@ -27,6 +27,8 @@ jobs:
           EMAIL_PASSWORD_ME: ${{ secrets.EMAIL_PASSWORD_ME }}
         run: python main.py
       - name: execute py script # run main.py
+        env: 
+          SERVICETOKENMD : ${{ secrets.SERVICETOKENMD  }}
         run: python immo.py
         
       - name: Save Excel File
