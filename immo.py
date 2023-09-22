@@ -51,7 +51,20 @@ full_df.to_csv(csv_name, sep='|')
 
 SERVICETOKENMD = os.environ["SERVICETOKENMD"]
 
+df_out = (
+    full_df[
+        ['property.type','property.bedroomCount','property.location.postalCode','extractDate','price.mainValue','id']
+    ]
+    .groupby(
+        ['property.type','property.bedroomCount','property.location.postalCode','extractDate']
+    )
+    .agg({'id': 'count', 'price.mainValue': 'sum'}).reset_index()
+    
+)
+
+df_out.columns = ['property.type', 'property.bedroomCount', 'property.location.postalCode', 'extractDate', 'count_id', 'sum_value']
+df_out.to_csv("toduckdbbbbb.csv")
 
 # initiate the MotherDuck connection through a service token through
 con = duckdb.connect(f'md:aggregated?motherduck_token={SERVICETOKENMD}') 
-con.sql(f"INSERT INTO aggregated_table SELECT * FROM {csv_name}")
+con.sql(f"INSERT INTO aggregated_table SELECT * FROM toduckdbbbbb.csv")
