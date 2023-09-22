@@ -10,6 +10,7 @@ import pandas as pd
 from pandas import json_normalize
 from time import sleep
 import random 
+import duckdb
 
 flag = True
 page = 1
@@ -44,6 +45,12 @@ full_df["extractDate"] = datetime.datetime.now()
 full_df["extractYear"] = datetime.datetime.now().strftime("%Y")
 full_df["extractMonth"] = datetime.datetime.now().strftime("%m")
 full_df["extractDay"] = datetime.datetime.now().strftime("%d")
-full_df.to_csv(f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv", sep='|')
+csv_name = f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv"
+full_df.to_csv(csv_name, sep='|')
 
 SERVICETOKENMD = os.environ["SERVICETOKENMD"]
+
+
+# initiate the MotherDuck connection through a service token through
+con = duckdb.connect(f'md:aggregated?motherduck_token={SERVICETOKENMD}') 
+con.sql(f"INSERT INTO TABLE aggregated_table AS SELECT * FROM {csv_name}")
