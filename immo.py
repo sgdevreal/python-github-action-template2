@@ -68,4 +68,4 @@ df_out.to_csv("toduckdbbbbb.csv")
 # initiate the MotherDuck connection through a service token through
 con = duckdb.connect(f'md:aggregated?motherduck_token={SERVICETOKENMD}') 
 #con.sql(f"INSERT INTO aggregated_table SELECT * FROM toduckdbbbbb.csv")
-con.sql(f"INSERT INTO fulltable SELECT * FROM '{csv_name}'")
+con.sql(f"INSERT INTO fulldata SELECT * FROM '{csv_name}'")
