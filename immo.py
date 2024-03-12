@@ -6,6 +6,31 @@ from time import sleep
 import random
 import os
 import duckdb
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+try:
+    SOME_SECRET = os.environ["EMAIL_ME"]
+    EMAIL_PASSWORD_ME = os.environ["EMAIL_PASSWORD_ME"]
+except KeyError:
+    SOME_SECRET = "Token not available!"
+    EMAIL_PASSWORD_ME  ="HAHA"
+
+def send_email(sender_email, sender_password, receiver_email, subject, body):
+    # Create a multipart message and set headers
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+
+    # Add body to the email
+    message.attach(MIMEText(body, "plain"))
+
+    # Create SMTP session for sending the email
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()  # Enable secure connection
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
 
 def fetch_data(page):
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -29,6 +54,7 @@ def main():
         
         df_list.append(json_normalize(results))
         page += 1
+        break
 
     full_df = pd.concat(df_list)
     full_df["extractDate"] = datetime.datetime.now()
@@ -52,10 +78,19 @@ def main():
 
     if SERVICETOKENMD:
         con = duckdb.connect(f'md:aggregated?motherduck_token={SERVICETOKENMD}') 
-        con.execute(f"INSERT INTO aggregated_table SELECT * FROM CSVREAD('toduckdbbbbb.csv')")
-        con.execute(f"INSERT INTO fulldata SELECT * FROM CSVREAD('{csv_name}')")
+        # con.execute(f"INSERT INTO aggregated_table SELECT * FROM CSVREAD('toduckdbbbbb.csv')")
+        # con.execute(f"INSERT INTO fulldata SELECT * FROM CSVREAD('{csv_name}')")
     else:
         print("SERVICETOKENMD environment variable not set!")
-
+    return df_out.shape[0]
 if __name__ == "__main__":
-    main()
+    count = main()
+
+    sender_email = SOME_SECRET
+    sender_password = EMAIL_PASSWORD_ME
+    receiver_email = SOME_SECRET
+    subject = "Hello from Python!"
+    body = f"You have extracted {count} housing offers"
+
+    # Call the send_email function
+    send_email(sender_email, sender_password, receiver_email, subject, body)
