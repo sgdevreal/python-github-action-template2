@@ -1,12 +1,23 @@
-# Schedule a Python script with GitHub Actions
+# Immoweb Scraper
 
-**Watch the video tutorial:**
+This Python script (`immo.py`) fetches housing data from Immoweb, performs data aggregation and analysis, and sends an email notification with the results.
 
-[![Alt text](https://img.youtube.com/vi/PaGp7Vi5gfM/hqdefault.jpg)](https://youtu.be/PaGp7Vi5gfM)
+## How it Works
 
-This example shows how to run a Python script as cron job with GitHub Actions. It calls an API once a week (could be any schedule you want), logs the response in `status.log`, and automatically pushes the changes to this repo.
+1. The script fetches housing data from Immoweb's API, paginating through the results.
+2. Fetched data is processed, normalized, and aggregated to perform analysis.
+3. The aggregated data is saved to CSV files and uploaded to a DuckDB database.
+4. An email notification is sent with the count of housing offers extracted.
 
-- Implement your script in `main.py`
-- Inspect and configure cron job in GitHub Action `.github/workflows/actions.yml`
-- It can install and use third party packages from `requirements.txt`
-- Secret environment variables can be used. Set secrets in Settings/Secrets/Actions -> 'New repository secret'. Use the same secret name inside `actions.yml` and `main.py`
+## Usage
+
+The script is triggered by a GitHub Actions workflow (`main.yml`) which runs daily at 15:30 UTC.
+
+## Requirements
+
+- Python 3.9
+- Required Python packages are listed in `requirements.txt`.
+- Environment variables:
+  - `EMAIL_ME`: Sender email address for notification.
+  - `EMAIL_PASSWORD_ME`: Sender email password.
+  - `SERVICETOKENMD`: Service token for accessing DuckDB.
