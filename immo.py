@@ -82,7 +82,7 @@ def main():
         con.sql(f"INSERT INTO fulldata SELECT * FROM '{csv_name}'")
     else:
         print("SERVICETOKENMD environment variable not set!")
-    return df_out.shape[0]
+    return full_df.shape[0]
 
 if __name__ == "__main__":
     count = main()
