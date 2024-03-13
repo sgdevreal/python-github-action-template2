@@ -1,4 +1,4 @@
-name: run main.py
+name: run main.py manually
 
 on:
   workflow_dispatch
@@ -22,13 +22,10 @@ jobs:
           pip install -r requirements.txt
           
       - name: execute py script # run main.py
-        env:
-          EMAIL_ME: ${{ secrets.EMAIL_ME }}
-          EMAIL_PASSWORD_ME: ${{ secrets.EMAIL_PASSWORD_ME }}
-        run: python main.py
-      - name: execute py script # run main.py
         env: 
           SERVICETOKENMD : ${{ secrets.SERVICETOKENMD  }}
+          EMAIL_ME: ${{ secrets.EMAIL_ME }}
+          EMAIL_PASSWORD_ME: ${{ secrets.EMAIL_PASSWORD_ME }}
         run: python immo.py
         
       - name: Save Excel File
@@ -47,3 +44,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main 
+
