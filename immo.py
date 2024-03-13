@@ -62,7 +62,7 @@ def main():
     full_df["extractDay"] = full_df["extractDate"].dt.strftime("%d")
     
     csv_name = f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv"
-    full_df.to_csv(csv_name, sep='|', index=False)
+    full_df.to_csv(csv_name, sep='|')
 
     df_out = (
         full_df[['property.type', 'property.bedroomCount', 'property.location.postalCode', 'extractDate', 'price.mainValue', 'id']]
@@ -71,7 +71,7 @@ def main():
         .reset_index()
     )
     df_out.columns = ['property.type', 'property.bedroomCount', 'property.location.postalCode', 'extractDate', 'count_id', 'sum_value']
-    df_out.to_csv("toduckdbbbbb.csv", index=False)
+    df_out.to_csv("toduckdbbbbb.csv")
 
     SERVICETOKENMD = os.environ.get("SERVICETOKENMD")
 
