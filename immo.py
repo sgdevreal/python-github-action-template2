@@ -36,7 +36,7 @@ def fetch_data(page):
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     headers = {'User-Agent': user_agent}
     response = requests.get(f'https://www.immoweb.be/fr/search-results/maison-et-appartement/a-vendre/arrondissement?countries=BE&page={page}&orderBy=relevance', headers=headers)
-    return response.json()['results']
+    return response.json()
 
 def main():
     flag = True
@@ -48,11 +48,11 @@ def main():
         sleep(random.randint(1, 5))
         
         results = fetch_data(page)
-        if not results:
+        if len(results)==0:
             flag = False
             break
         
-        df_list.append(json_normalize(results))
+        df_list.append(json_normalize(results['results']))
         page += 1
 
     full_df = pd.concat(df_list)
@@ -93,3 +93,7 @@ if __name__ == "__main__":
 
     # Call the send_email function
     send_email(sender_email, sender_password, receiver_email, subject, body)
+
+
+
+
