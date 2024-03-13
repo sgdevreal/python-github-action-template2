@@ -54,7 +54,6 @@ def main():
         
         df_list.append(json_normalize(results))
         page += 1
-        break
 
     full_df = pd.concat(df_list)
     full_df["extractDate"] = datetime.datetime.now()
@@ -78,8 +77,8 @@ def main():
 
     if SERVICETOKENMD:
         con = duckdb.connect(f'md:aggregated?motherduck_token={SERVICETOKENMD}') 
-        con.execute(f"INSERT INTO aggregated_table SELECT * FROM CSVREAD('toduckdbbbbb.csv')")
-        con.execute(f"INSERT INTO fulldata SELECT * FROM CSVREAD('{csv_name}')")
+        con.sql(f"INSERT INTO aggregated_table SELECT * FROM toduckdbbbbb.csv")
+        con.sql(f"INSERT INTO fulldata SELECT * FROM '{csv_name}'")
     else:
         print("SERVICETOKENMD environment variable not set!")
     return df_out.shape[0]
