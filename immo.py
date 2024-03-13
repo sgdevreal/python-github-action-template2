@@ -36,7 +36,7 @@ def send_email(sender_email, sender_password, receiver_email, subject, body):
 def fetch_data(page):
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     headers = {'User-Agent': user_agent}
-    response = requests.get(f'https://www.immoweb.be/fr/search-results/maison-et-appartement/a-vendre/arrondissement?countries=BE&page={page}&orderBy=relevance', headers=headers)
+    response = requests.get(f'https://www.immoweb.be/fr/search-results/maison-et-appartement/a-vendre/bruxelles/arrondissement?countries=BE&page={page}&orderBy=relevance', headers=headers)
     return response.json()
 
 def main():
