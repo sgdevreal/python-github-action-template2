@@ -8,6 +8,7 @@ import os
 import duckdb
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import smtplib
 
 try:
     SOME_SECRET = os.environ["EMAIL_ME"]
@@ -82,6 +83,7 @@ def main():
     else:
         print("SERVICETOKENMD environment variable not set!")
     return df_out.shape[0]
+
 if __name__ == "__main__":
     count = main()
 
