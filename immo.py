@@ -33,22 +33,27 @@ def send_email(sender_email, sender_password, receiver_email, subject, body):
         server.login(sender_email, sender_password)
         server.sendmail(sender_email, receiver_email, message.as_string())
 
-def fetch_data(page):
+def fetch_data(page,t,p):
+    url = f'https://www.immoweb.be/fr/search-results/{t}/a-vendre/?countries=BE&provinces={p}&page={page}&orderBy=relevance'
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     headers = {'User-Agent': user_agent}
-    response = requests.get(f'https://www.immoweb.be/fr/search-results/maison-et-appartement/a-vendre/bruxelles/arrondissement?countries=BE&page={page}&orderBy=relevance', headers=headers)
+    response = requests.get(url, headers=headers).json()
     return response.json()
 
-def main():
+def main(t,p):
     flag = True
     page = 1
     df_list = []
-    
-    while flag and page <= 500:
-        print(f'page : {page} - time : {datetime.datetime.now()}')
+    url = f'https://www.immoweb.be/fr/search-results/{t}/a-vendre/?countries=BE&provinces={p}&page=1&orderBy=relevance'
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    headers = {'User-Agent': user_agent}
+    response = requests.get(url, headers=headers).json()
+    pages = (response['marketingCount']//30)+1
+    while flag and page <= pages:
+        print(f'type : {t} province : {p} page : {page} - time : {datetime.datetime.now()}')
         sleep(random.randint(1, 5))
         
-        results = fetch_data(page)
+        results = fetch_data(page,t,p)
         if len(results)==0:
             flag = False
             break
@@ -62,7 +67,21 @@ def main():
     full_df["extractMonth"] = full_df["extractDate"].dt.strftime("%m")
     full_df["extractDay"] = full_df["extractDate"].dt.strftime("%d")
     
+    return full_df
+
+if __name__ == "__main__":
+    count = 0
+    df_list = []
+    provinces = ['BRUSSELS','EAST_FLANDERS','NAMUR','LUXEMBOURG','WALLOON_BRABANT','FLEMISH_BRABANT','LIEGE','WEST_FLANDERS','HAINAUT','LIMBURG','ANTWERP']
+    type = ['maison','appartement']
+    for p in provinces:
+        for t in type:
+            df = main(t,p)
+            count += df.shape[0]
+            df_list.append(df)
+
     csv_name = f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv"
+    full_df = pd.concat(df_list)
     full_df.to_csv(csv_name, sep='|')
 
     df_out = (
@@ -82,10 +101,6 @@ def main():
         con.sql(f"INSERT INTO fulldata SELECT * FROM '{csv_name}'")
     else:
         print("SERVICETOKENMD environment variable not set!")
-    return full_df.shape[0]
-
-if __name__ == "__main__":
-    count = main()
 
     sender_email = SOME_SECRET
     sender_password = EMAIL_PASSWORD_ME
