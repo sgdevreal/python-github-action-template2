@@ -70,14 +70,12 @@ def main(t,p):
     return full_df
 
 if __name__ == "__main__":
-    count = 0
     df_list = []
     provinces = ['BRUSSELS','EAST_FLANDERS','NAMUR','LUXEMBOURG','WALLOON_BRABANT','FLEMISH_BRABANT','LIEGE','WEST_FLANDERS','HAINAUT','LIMBURG','ANTWERP']
     type = ['maison','appartement']
     for p in provinces:
         for t in type:
             df = main(t,p)
-            count += df.shape[0]
             df_list.append(df)
 
     csv_name = f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv"
@@ -92,7 +90,7 @@ if __name__ == "__main__":
     )
     df_out.columns = ['property.type', 'property.bedroomCount', 'property.location.postalCode', 'extractDate', 'count_id', 'sum_value']
     df_out.to_csv("toduckdbbbbb.csv")
-
+    count = df_out.shape[0]
     SERVICETOKENMD = os.environ.get("SERVICETOKENMD")
 
     if SERVICETOKENMD:
