@@ -90,7 +90,7 @@ if __name__ == "__main__":
     )
     df_out.columns = ['property.type', 'property.bedroomCount', 'property.location.postalCode', 'extractDate', 'count_id', 'sum_value']
     df_out.to_csv("toduckdbbbbb.csv")
-    count = df_out.shape[0]
+    count = full_df.shape[0]
     SERVICETOKENMD = os.environ.get("SERVICETOKENMD")
 
     if SERVICETOKENMD:
