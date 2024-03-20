@@ -37,7 +37,7 @@ def fetch_data(page,t,p):
     url = f'https://www.immoweb.be/fr/search-results/{t}/a-vendre/?countries=BE&provinces={p}&page={page}&orderBy=relevance'
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     headers = {'User-Agent': user_agent}
-    response = requests.get(url, headers=headers).json()
+    response = requests.get(url, headers=headers)
     return response.json()
 
 def main(t,p):
