@@ -48,7 +48,13 @@ def main(t,p):
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     headers = {'User-Agent': user_agent}
     response = requests.get(url, headers=headers).json()
-    pages = (response['marketingCount']//30)+1
+    if response['marketingCount']%30==0:
+        pages = (response['marketingCount']//30)
+    else:
+        pages = (response['marketingCount']//30)+1
+    print("=====")
+    print(f" count of props : response['marketingCount']")
+    print(url)
     while flag and page <= pages:
         print(f'type : {t} province : {p} page : {page} - time : {datetime.datetime.now()}')
         sleep(random.randint(1, 5))
