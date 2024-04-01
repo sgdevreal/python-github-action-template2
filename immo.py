@@ -53,7 +53,7 @@ def main(t,p):
     else:
         pages = (response['marketingCount']//30)+1
     print("=====")
-    print(f" count of props : response['marketingCount']")
+    print(f" count of props : {response['marketingCount']}")
     print(url)
     while flag and page <= pages:
         print(f'type : {t} province : {p} page : {page} - time : {datetime.datetime.now()}')
