@@ -57,7 +57,7 @@ def main(t,p):
     print(url)
     while flag and page <= pages:
         print(f'type : {t} province : {p} page : {page} - time : {datetime.datetime.now()}')
-        sleep(random.randint(1, 5))
+        sleep(random.randint(2, 5))
         
         results = fetch_data(page,t,p)
         if len(results)==0:
