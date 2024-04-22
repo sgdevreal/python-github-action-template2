@@ -102,7 +102,7 @@ if __name__ == "__main__":
     if SERVICETOKENMD:
         con = duckdb.connect(f'md:aggregated?motherduck_token={SERVICETOKENMD}') 
 
-        con.sql(f"CREATE OR REPLACE TABLE V2fulldata SELECT * FROM '{csv_name}'") # last run only
+        con.sql(f"CREATE OR REPLACE TABLE V2fulldata AS SELECT * FROM '{csv_name}'") # last run only
 
         con.sql(f"""INSERT INTO V2aggregated_table 
                 SELECT
