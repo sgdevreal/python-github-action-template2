@@ -101,8 +101,65 @@ if __name__ == "__main__":
 
     if SERVICETOKENMD:
         con = duckdb.connect(f'md:aggregated?motherduck_token={SERVICETOKENMD}') 
-        con.sql(f"INSERT INTO aggregated_table SELECT * FROM toduckdbbbbb.csv")
-        con.sql(f"INSERT INTO fulldata SELECT * FROM '{csv_name}'")
+
+        con.sql(f"CREATE OR REPLACE TABLE V2fulldata SELECT * FROM '{csv_name}'") # last run only
+
+        con.sql(f"""INSERT INTO V2aggregated_table 
+                SELECT
+                    "property.location.country",
+                    "property.location.region",
+                    "property.location.province",
+                    "property.location.district",
+                    "property.location.locality",
+                    "property.location.postalCode",
+                    "transaction.type",
+                    CASE
+                        WHEN "property.netHabitableSurface" <= 50 THEN '0-50'
+                        WHEN "property.netHabitableSurface" <= 100 THEN '51-100'
+                        WHEN "property.netHabitableSurface" <= 150 THEN '101-150'
+                        ELSE 'Over 150'
+                    END AS netHabitableSurface_bin,
+                    COUNT(*) AS num_properties,
+                    SUM("property.netHabitableSurface") AS sum_net_habitable_surface,
+                    AVG("property.netHabitableSurface") AS avg_net_habitable_surface,
+                    SUM("property.roomCount") AS sum_room_count,
+                    AVG("property.roomCount") AS avg_room_count,
+                    SUM("price.mainValue") AS sum_price,
+                    AVG("price.mainValue") AS avg_price,
+                    MAX("price.mainValue") AS max_price,
+                    MIN("price.mainValue") AS min_price,
+                    MAX("property.landSurface") AS max_land_surface,
+                    "extractDate",
+                    "extractYear",
+                    "extractMonth",
+                    "extractDay",
+                    PERCENTILE_CONT(0.05) WITHIN GROUP (ORDER BY "price.mainValue") AS low_percentile,
+                    PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY "price.mainValue") AS high_percentile,
+                    CASE
+                        WHEN "price.mainValue" < low_percentile THEN 'isToLow'
+                        ELSE NULL
+                    END AS price_flag_low,
+                    CASE
+                        WHEN "price.mainValue" > high_percentile THEN 'isToHigh'
+                        ELSE NULL
+                    END AS price_flag_high
+                FROM
+                    V2fulldata
+                GROUP BY
+                    "property.location.country",
+                    "property.location.region",
+                    "property.location.province",
+                    "property.location.district",
+                    "property.location.locality",
+                    "property.location.postalCode",
+                    "transaction.type",
+                    "netHabitableSurface_bin",
+                    "extractDate",
+                    "extractYear",
+                    "extractMonth",
+                    "extractDay",
+                    "price.mainValue"
+                """)
     else:
         print("SERVICETOKENMD environment variable not set!")
 
