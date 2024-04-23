@@ -112,7 +112,7 @@ if __name__ == "__main__":
                     "property.location.district",
                     "property.location.locality",
                     "property.location.postalCode",
-                    "transaction.type",
+                    "property.type",
                     CASE
                         WHEN "property.netHabitableSurface" <= 50 THEN '0-50'
                         WHEN "property.netHabitableSurface" <= 100 THEN '51-100'
