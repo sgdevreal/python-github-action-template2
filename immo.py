@@ -152,7 +152,7 @@ if __name__ == "__main__":
                     "property.location.district",
                     "property.location.locality",
                     "property.location.postalCode",
-                    "transaction.type",
+                    "property.type",
                     "netHabitableSurface_bin",
                     "extractDate",
                     "extractYear",
