@@ -85,6 +85,7 @@ if __name__ == "__main__":
             df_list.append(df)
 
     csv_name = f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv"
+    print(csv_name)
     full_df = pd.concat(df_list)
     full_df.to_csv(csv_name, sep='|')
 
