@@ -38,6 +38,15 @@ jobs:
           
       - name: List files after moving
         run: ls -R immo/outputfolder
+        
+      - name: Check if file exists and is not empty
+        run: |
+          if [ -s immo/outputfolder/database__$(date +'%Y%m%d').csv ]; then
+            echo "File exists and is not empty."
+          else
+            echo "File does not exist or is empty."
+            exit 1
+          fi
 
       - name: commit files
         run: |
