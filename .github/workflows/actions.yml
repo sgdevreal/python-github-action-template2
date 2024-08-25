@@ -29,9 +29,15 @@ jobs:
           EMAIL_PASSWORD_ME: ${{ secrets.EMAIL_PASSWORD_ME }}
         run: python immo.py
         
+      - name: List files before moving
+        run: ls -R immo/outputfolder
+      
       - name: Save Excel File
         run: |
           mv immo/outputfolder/database_$(date +'%Y%m%d').csv immo/outputfolder/database__$(date +'%Y%m%d').csv
+          
+      - name: List files after moving
+        run: ls -R immo/outputfolder
 
       - name: commit files
         run: |
