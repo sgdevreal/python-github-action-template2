@@ -21,3 +21,7 @@ The script is triggered by a GitHub Actions workflow (`main.yml`) which runs dai
   - `EMAIL_ME`: Sender email address for notification.
   - `EMAIL_PASSWORD_ME`: Sender email password.
   - `SERVICETOKENMD`: Service token for accessing DuckDB.
+
+## info on files in /immo folder
+
+At first only Brussels was scraped, this was changes in early summer 2024. Also recenlty files had stopped saving. To be fixed
