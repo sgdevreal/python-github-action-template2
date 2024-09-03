@@ -31,8 +31,8 @@ jobs:
 
       - name: Check file size
         run: |
-          ls -lh immo/outputfolder/database__$(date +'%Y%m%d').csv
-          du -h immo/outputfolder/database__$(date +'%Y%m%d').csv
+          ls -lh immo/outputfolder/database_$(date +'%Y%m%d').csv
+          du -h immo/outputfolder/database_$(date +'%Y%m%d').csv
     
       - name: List files before moving
         run: ls -R immo/outputfolder

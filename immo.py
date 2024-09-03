@@ -83,8 +83,10 @@ if __name__ == "__main__":
         for t in type:
             df = main(t,p)
             df_list.append(df)
-
-    csv_name = f"immo/outputfolder/database_{datetime.datetime.today().strftime('%Y%m%d')}.csv"
+    # Ensure the directory exists
+    output_dir = 'immo/outputfolder/'
+    os.makedirs(output_dir, exist_ok=True)
+    csv_name = f"{output_dir}database_{datetime.datetime.today().strftime('%Y%m%d')}.csv"
     print(csv_name)
     full_df = pd.concat(df_list)
     full_df.to_csv(csv_name, sep='|')

@@ -27,10 +27,30 @@ jobs:
           EMAIL_ME: ${{ secrets.EMAIL_ME }}
           EMAIL_PASSWORD_ME: ${{ secrets.EMAIL_PASSWORD_ME }}
         run: python immo.py
-        
+
+      - name: Check file size
+        run: |
+          ls -lh immo/outputfolder/database_$(date +'%Y%m%d').csv
+          du -h immo/outputfolder/database_$(date +'%Y%m%d').csv
+    
+      - name: List files before moving
+        run: ls -R immo/outputfolder
+      
       - name: Save Excel File
         run: |
           mv immo/outputfolder/database_$(date +'%Y%m%d').csv immo/outputfolder/database__$(date +'%Y%m%d').csv
+          
+      - name: List files after moving
+        run: ls -R immo/outputfolder
+        
+      - name: Check if file exists and is not empty
+        run: |
+          if [ -s immo/outputfolder/database__$(date +'%Y%m%d').csv ]; then
+            echo "File exists and is not empty."
+          else
+            echo "File does not exist or is empty."
+            exit 1
+          fi
 
       - name: commit files
         run: |
@@ -44,4 +64,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main 
-
