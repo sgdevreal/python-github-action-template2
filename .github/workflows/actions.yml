@@ -2,15 +2,14 @@ name: run main.py
 
 on:
   schedule:
-    - cron: '00 01 * * *' # At 00:00 on Monday
+    - cron: '00 01 * * *' # At 01:00 on Monday
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+        uses: actions/checkout@v2 # checkout the repository content to GitHub runner
 
       - name: setup python
         uses: actions/setup-python@v4
@@ -24,7 +23,7 @@ jobs:
           
       - name: execute py script # run main.py
         env: 
-          SERVICETOKENMD : ${{ secrets.SERVICETOKENMD  }}
+          SERVICETOKENMD: ${{ secrets.SERVICETOKENMD }}
           EMAIL_ME: ${{ secrets.EMAIL_ME }}
           EMAIL_PASSWORD_ME: ${{ secrets.EMAIL_PASSWORD_ME }}
         run: python immo.py
@@ -37,31 +36,38 @@ jobs:
       - name: List files before moving
         run: ls -R immo/outputfolder
       
-      - name: Save Excel File
+      - name: Save CSV file
         run: |
           mv immo/outputfolder/database_$(date +'%Y%m%d').csv immo/outputfolder/database__$(date +'%Y%m%d').csv
           
-      - name: List files after moving
-        run: ls -R immo/outputfolder
-        
-      - name: Check if file exists and is not empty
+      - name: Split large CSV file into smaller parts
         run: |
-          if [ -s immo/outputfolder/database__$(date +'%Y%m%d').csv ]; then
-            echo "File exists and is not empty."
-          else
-            echo "File does not exist or is empty."
-            exit 1
-          fi
+          split -b 90M immo/outputfolder/database__$(date +'%Y%m%d').csv immo/outputfolder/database_part_
+        # Splits the file into 90MB chunks (to stay well within GitHub’s 100MB limit)
+        
+      - name: List files after splitting
+        run: ls -lh immo/outputfolder
+
+      - name: Check if files exist and are not empty
+        run: |
+          for file in immo/outputfolder/database_part_*; do
+            if [ -s "$file" ]; then
+              echo "$file exists and is not empty."
+            else
+              echo "$file does not exist or is empty."
+              exit 1
+            fi
+          done
 
       - name: commit files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add -A
-          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
+          git add immo/outputfolder/database_part_*
+          git diff-index --quiet HEAD || (git commit -a -m "Split large CSV into parts" --allow-empty)
           
       - name: push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main 
+          branch: main
