@@ -42,7 +42,7 @@ jobs:
           
       - name: Split large CSV file into smaller parts
         run: |
-          split -b 90M immo/outputfolder/database__$(date +'%Y%m%d').csv immo/outputfolder/database_part_
+          split -b 90M immo/outputfolder/database__$(date +'%Y%m%d').csv immo/outputfolder/database_$(date +'%Y%m%d')_part_
         # Splits the file into 90MB chunks (to stay well within GitHub’s 100MB limit)
         
       - name: List files after splitting
