@@ -63,8 +63,9 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add immo/outputfolder/database_part_*
-          git diff-index --quiet HEAD || (git commit -a -m "Split large CSV into parts" --allow-empty)
+          git add immo/outputfolder/database_$(date +'%Y%m%d')_part_*
+          git diff-index --quiet HEAD || git commit -m "Split large CSV into parts"
+
           
       - name: push changes
         uses: ad-m/github-push-action@v0.6.0
